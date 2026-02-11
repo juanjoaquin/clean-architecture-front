@@ -1,15 +1,15 @@
-'use server'
+'use server';
 
-import { Suspense } from "react"
-import UsersContent from "./components/UsersContent"
+import { Suspense } from "react";
+import UsersTable from "./components/UsersTable";
+import { TableSkeleton } from "@/src/architecture/presentation/components/ui/TableSkeleton";
 
+export default async function Page() {
 
-export default async function page() {
     return (
-        <section>
-            <Suspense fallback={<div>Loading...</div>}>
-                <UsersContent />
-            </Suspense>
-        </section>
+        <Suspense fallback={<TableSkeleton columns={5} rows={5} />}>
+            <UsersTable />
+        </Suspense>
     )
+
 }
