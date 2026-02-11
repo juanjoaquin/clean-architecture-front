@@ -2,6 +2,7 @@
 
 import { getAllUsersAction } from "@/src/architecture/presentation/actions/getAllUsers.action"
 import { Table, TableCell, TableRow } from "@/src/architecture/presentation/components/ui/TableComponent";
+import Link from "next/link";
 
 export default async function UsersTable() {
 
@@ -33,13 +34,18 @@ export default async function UsersTable() {
             <TableCell>{user.lastName || 'Sin especificar'}</TableCell>
             <TableCell>{user.email || 'Sin especificar'}</TableCell>
             <TableCell>{user.phone || 'Sin especificar'}</TableCell>
-            <TableCell>
-              <button className="text-blue-600 hover:text-blue-800 mr-2">
+            <TableCell className="flex items-center gap-2">
+              <button className="text-blue-600 hover:text-blue-800">
                 Editar
               </button>
               <button className="text-red-600 hover:text-red-800">
                 Eliminar
               </button>
+              <Link href={`/users/${user.id}`}>
+                <button className="text-green-600 hover:text-green-800">
+                  Ver
+                </button>
+              </Link>
             </TableCell>
           </TableRow>
         )}
