@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
                 tags: ['users']
             }
         })
-        
+
         if (!response.success) {
             return response; // TS sabe que acá NO hay data
         }
@@ -35,6 +35,22 @@ export class UserRepository implements IUserRepository {
 
     }
 
+    async getById(id: string): Promise<Result<User>> {
+        const response = await this.httpClient.get<BackendUser>(`users/${id}`, {
+            next: {
+                tags: ['users']
+            }
+        });
 
+        if (!response.success) {
+            return response;
+        }
+        const user = UserMapper.fromBackend(response.data);
+        
+        return {
+            success: true,
+            data: user
+        };
+    }
 
 }
