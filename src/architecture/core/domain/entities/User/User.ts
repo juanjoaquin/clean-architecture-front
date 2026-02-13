@@ -20,10 +20,10 @@ export type UserResponse = {
 
 /* Zod Validations */
 export const createUserSchema = z.object({
-    first_name: z.string({ error: 'First name is required' }).min(1, 'Put one caracter').max(50, 'Max 50 caracters'),
-    last_name: z.string({ error: 'Last name is required' }).min(1, 'Put one caracter').max(50, 'Max 50 caracters'),
-    email: z.email({ error: 'Email is required' }).min(1, 'Put one caracter'),
-    phone: z.string({ error: 'Phone is required' }).regex(/^\d+$/, "Solo se permiten números")
+    first_name: z.string({ error: 'First name is required' }).min(1, 'Ingrese un nombre').max(50, 'Max 50 caracters'),
+    last_name: z.string({ error: 'Last name is required' }).min(1, 'Ingrese un apellido').max(50, 'Max 50 caracters'),
+    email: z.email({ error: 'Formato de email inválido' }).min(1, 'Ingrese un email').max(50, 'Max 50 caracters'),
+    phone: z.string({ error: 'Phone is required' }).regex(/^\d+$/, "Ingrese un número de teléfono")
 });
 
 export type TCreateUserInput = z.infer<typeof createUserSchema>
