@@ -4,24 +4,29 @@ import { Suspense } from "react";
 import UsersTable from "./components/UsersTable";
 import { TableSkeleton } from "@/src/architecture/presentation/components/ui/TableSkeleton";
 import Link from "next/link";
+import { Plus } from "lucide-react";
+import { PageTitle } from "@/src/architecture/presentation/components/PageTitle";
 
 
 export default async function Page() {
 
     return (
         <>
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-                <div>
-                    <h1 className="text-2xl font-bold">Usuarios</h1>
-                </div>
-                <div>
-                    <Link href="/users/crear">
-                        <span className="px-4 py-2 bg-blue-500 text-white font-medium rounded-md cursor-pointer hover:bg-blue-600">
-                            Agregar Usuario
+            <div className="content-container">
 
-                        </span>
-                    </Link>
-                </div>
+                <PageTitle
+                    title="Usuarios"
+                    description="Administra todos los usuarios del sistema"
+                    actions={
+                        <Link
+                            href="/users/crear"
+                            className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+                        >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Nuevo Usuario
+                        </Link>
+                    }
+                />
             </div>
             <Suspense fallback={<TableSkeleton columns={5} rows={5} />}>
                 <UsersTable />

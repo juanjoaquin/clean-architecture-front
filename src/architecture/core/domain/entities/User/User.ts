@@ -28,8 +28,8 @@ export const createUserSchema = z.object({
 
 export type TCreateUserInput = z.infer<typeof createUserSchema>
 
-/* export const updateUserSchema = createUserSchema.partial().extend({
-        id: z.uuid("Invalid user id"),
-    });
- */
-export type TUpdateUserInput = z.infer<typeof createUserSchema>
+export const updateUserSchema = createUserSchema.partial().extend({
+    id: z.string("Invalid user id"),
+});
+
+export type TUpdateUserInput = z.infer<typeof updateUserSchema>
