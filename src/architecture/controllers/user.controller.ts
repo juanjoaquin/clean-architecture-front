@@ -6,6 +6,7 @@ import { getAllUsers } from "../core/use-cases/User/getAllUsers.use-case";
 import { getUserById } from "../core/use-cases/User/getUserByID.use-case";
 import { createUser } from "../core/use-cases/User/createUser.use-case";
 import { updateUser } from "../core/use-cases/User/updateUser.use-case";
+import { deleteUser } from "../core/use-cases/User/deleteUser.use-case";
 
 export class UserController {
     constructor(private userRepository: IUserRepository) { }
@@ -37,23 +38,12 @@ export class UserController {
     async getUserByID(id: string): Promise<Result<User>> {
         try {
             const result = await getUserById(id, this.userRepository);
-            if (!result.success) {
-                Logger.error(
-                    { layer: '[CONTROLLER]', context: 'user.controller.GetUserByID' },
-                    '[CONTROLLER] [ERROR] Failed to get user',
-                    result.error
-                )
-            }
+
             return result;
         } catch (error) {
-            Logger.error(
-                { layer: 'CONTROLLER', context: 'user.controller.GetUserByID' },
-                'Unexpected error',
-                error
-            );
-            return Err(
-                error instanceof Error ? error.message : 'Unknown error'
-            );
+			
+            throw error;
+
         }
     }
 
@@ -104,5 +94,28 @@ export class UserController {
         }
     }
 
+    async deleteUser(id: string): Promise<Result<null>> {
+        try {
+            const response = await deleteUser(this.userRepository, id);
+            
+            if (!response.success) {
+                Logger.error(
+                    { layer: '[CONTROLLER]', context: 'user.controller.DeleteUser' },
+                    '[CONTROLLER] [ERROR] Failed to delete user',
+                    response.error
+                )
+            }
+
+            return response;
+        }
+        catch (error) {
+            Logger.error(
+                { layer: 'CONTROLLER', context: 'user.controller.DeleteUser' },
+                'Unexpected error',
+                error
+            );
+            return Err(error instanceof Error ? error.message : 'Unknown error');
+        }
+    }
 }
 
