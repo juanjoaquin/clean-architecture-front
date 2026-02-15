@@ -1,13 +1,14 @@
 import { IUserRepository } from "@/src/architecture/core/domain/repositories/IUserRepository";
-import { TCreateUserInput, User } from "@/src/architecture/core/domain/entities/User/User";
+import { TCreateUserInput, TUpdateUserInput, User } from "@/src/architecture/core/domain/entities/User/User";
 import { Logger } from "@/src/architecture/infraestructure/logger/logger";
 import { Err, Result } from "@/src/libs/apiUtils";
 import { getAllUsers } from "../core/use-cases/User/getAllUsers.use-case";
 import { getUserById } from "../core/use-cases/User/getUserByID.use-case";
 import { createUser } from "../core/use-cases/User/createUser.use-case";
+import { updateUser } from "../core/use-cases/User/updateUser.use-case";
 
 export class UserController {
-    constructor(private userRepository: IUserRepository) {}
+    constructor(private userRepository: IUserRepository) { }
 
     async getAllUsers(): Promise<Result<User[]>> {
         try {
@@ -15,14 +16,14 @@ export class UserController {
             if (!result.success) {
                 Logger.error(
                     { layer: '[CONTROLLER]', context: 'user.controller.GetAllUsers' },
-                    '[USE-CASE] [ERROR] Failed to get users',
+                    '[CONTROLLER] [ERROR] Failed to get users',
                     result.error
                 )
             }
             return result
         } catch (error) {
             Logger.error(
-                { layer: 'USE_CASE', context: 'GetAllUsersUseCase' },
+                { layer: 'CONTROLLER', context: 'user.controller.GetAllUsers' },
                 'Unexpected error',
                 error
             );
@@ -39,14 +40,14 @@ export class UserController {
             if (!result.success) {
                 Logger.error(
                     { layer: '[CONTROLLER]', context: 'user.controller.GetUserByID' },
-                    '[USE-CASE] [ERROR] Failed to get user',
+                    '[CONTROLLER] [ERROR] Failed to get user',
                     result.error
                 )
             }
             return result;
         } catch (error) {
             Logger.error(
-                { layer: 'USE_CASE', context: 'GetUserByIDUseCase' },
+                { layer: 'CONTROLLER', context: 'user.controller.GetUserByID' },
                 'Unexpected error',
                 error
             );
@@ -62,7 +63,7 @@ export class UserController {
             if (!response.success) {
                 Logger.error(
                     { layer: '[CONTROLLER]', context: 'user.controller.CreateUser' },
-                    '[USE-CASE] [ERROR] Failed to create user',
+                    '[CONTROLLER] [ERROR] Failed to create user',
                     response.error
                 )
             }
@@ -70,7 +71,7 @@ export class UserController {
         }
         catch (error) {
             Logger.error(
-                { layer: 'USE_CASE', context: 'GetUserByIDUseCase' },
+                { layer: 'CONTROLLER', context: 'user.controller.CreateUser' },
                 'Unexpected error',
                 error
             );
@@ -80,7 +81,28 @@ export class UserController {
         }
     }
 
+    async updateUser(data: TUpdateUserInput): Promise<Result<User>> {
+        try {
+            const response = await updateUser(this.userRepository, data);
+            
+            if (!response.success) {
+                Logger.error(
+                    { layer: '[CONTROLLER]', context: 'user.controller.UpdateUser' },
+                    '[CONTROLLER] [ERROR] Failed to update user',
+                    response.error
+                )
+            }
 
+            return response;
+        } catch (error) {
+            Logger.error(
+                { layer: 'CONTROLLER', context: 'updateUser' },
+                'Unexpected error',
+                error
+            );
+            return Err(error instanceof Error ? error.message : 'Unknown error');
+        }
+    }
 
 }
 

@@ -9,6 +9,16 @@ export interface BackendUser {
     Course: any | null;
 }
 
+export interface IBackendUserUpdate {
+    id: string;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    Course?: any | null;
+}
+
+
 export class UserMapper {
     static fromBackend(backend: BackendUser): User {
         return {
@@ -19,6 +29,17 @@ export class UserMapper {
             phone: backend.phone || "",
             // si User tiene más campos o es una class con constructor:
             // return User.create({ ... })
+        };
+    }
+
+    static toBackendUpdate(input: IBackendUserUpdate): IBackendUserUpdate {
+        return {
+            id: input.id,
+            first_name: input.first_name,
+            last_name: input.last_name,
+            email: input.email,
+            phone: input.phone,
+            Course: input.Course || null,
         };
     }
 }

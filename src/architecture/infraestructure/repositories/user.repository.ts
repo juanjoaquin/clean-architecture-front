@@ -1,7 +1,7 @@
 import { IUserRepository } from "@/src/architecture/core/domain/repositories/IUserRepository";
 import { HttpClient } from "../htttp/httpClient";
 import { API_CONFIG } from "../htttp/apiConfig";
-import { TCreateUserInput, User } from "@/src/architecture/core/domain/entities/User/User";
+import { TCreateUserInput, TUpdateUserInput, User } from "@/src/architecture/core/domain/entities/User/User";
 import { Result } from "@/src/libs/apiUtils";
 import { BackendUser, UserMapper } from "../dtos/UserResponse";
 
@@ -61,4 +61,34 @@ export class UserRepository implements IUserRepository {
         });
     }
 
+    async update(data: TUpdateUserInput): Promise<Result<User>> {
+        // Mapea los datos al formato del backend
+        const backendData = UserMapper.toBackendUpdate(data);
+
+        
+        // Envía PATCH con el ID en la URL
+        const response = await this.httpClient.patch<BackendUser>(
+            `users/${data.id}`, // 👈 ID en la URL
+            backendData,         // 👈 Datos mapeados (sin el id)
+            {
+                next: {
+                    tags: ['users', `users-${data.id}`]
+                }
+            }
+        );
+
+    
+        if (!response.success) {
+            return response;
+        }
+    
+        // Mapea la respuesta del backend a tu entidad de dominio
+        const user = UserMapper.fromBackend(response.data);
+
+        
+        return {
+            success: true,
+            data: user
+        };
+    }
 }
