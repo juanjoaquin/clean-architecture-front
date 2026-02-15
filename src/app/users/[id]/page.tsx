@@ -13,7 +13,7 @@ export default async function Page({ params }: ParamsProps) {
     const result = await getUserByIDAction(id);
 
     if (!result.success) {
-        return <div>Error: {result.error}</div>;
+        return <div>Error</div>;
     }
 
     const user = result.data;

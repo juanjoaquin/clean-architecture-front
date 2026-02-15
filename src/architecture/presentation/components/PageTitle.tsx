@@ -69,7 +69,7 @@ export function PageTitle({
                 <div>
 
                     {actions && (
-                        <div className="flex-shrink-0 ml-4">
+                        <div className="shrink-0 ml-4">
                             {actions}
                         </div>
                     )}

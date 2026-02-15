@@ -5,6 +5,7 @@ import { TCreateUserInput, User } from "../../core/domain/entities/User/User";
 import { Logger } from "../../infraestructure/logger/logger";
 import { UserRepository } from "../../infraestructure/repositories/user.repository";
 import { UserController } from "../../controllers/user.controller";
+import { updateTag } from "next/cache";
 
 export async function createUserAction(data: TCreateUserInput): Promise<Result<User>> {
     try {
@@ -20,6 +21,8 @@ export async function createUserAction(data: TCreateUserInput): Promise<Result<U
             );
             return response;
         }
+
+        updateTag(`users`);
 
         return {
             success: true,

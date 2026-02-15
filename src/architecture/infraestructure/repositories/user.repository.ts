@@ -38,7 +38,7 @@ export class UserRepository implements IUserRepository {
     async getById(id: string): Promise<Result<User>> {
         const response = await this.httpClient.get<BackendUser>(`users/${id}`, {
             next: {
-                tags: ['users']
+                tags: [`users-${id}`]
             }
         });
 
@@ -90,5 +90,13 @@ export class UserRepository implements IUserRepository {
             success: true,
             data: user
         };
+    }
+
+    async delete(id: string): Promise<Result<null>> {
+        return await this.httpClient.delete<null>(`users/${id}`, {
+            next: {
+                tags: [`users-${id}`]
+            }
+        });
     }
 }

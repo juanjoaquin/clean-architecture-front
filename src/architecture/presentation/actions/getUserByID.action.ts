@@ -12,13 +12,7 @@ export async function getUserByIDAction(id: string): Promise<Result<User>> {
 
         const result = await userController.getUserByID(id);
 
-        if (!result.success) {
-            Logger.error(
-                { layer: '[CONTROLLER]', context: 'user.controller.GetUserByID' },
-                '[USE-CASE] [ERROR] Failed to get user',
-                result.error
-            )
-        }
+
         return result;
         
     } catch (error) {

@@ -7,11 +7,13 @@ export async function getUserById(id: string, userRepository: IUserRepository): 
     try {
         const response = await userRepository.getById(id);
         if (!response.success) {
-            Logger.error(
-                { layer: 'USE_CASE', context: 'getUserById' },
-                'Repository returned error',
-                response.error
-            );
+            if (response.code !== 'NOT_FOUND') {
+                Logger.error(
+                    { layer: 'USE_CASE', context: 'getUserById' },
+                    'Repository returned error',
+                    response.error
+                );
+            }
             return response;
         }
         return response;
